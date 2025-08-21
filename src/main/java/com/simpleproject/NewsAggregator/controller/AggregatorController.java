@@ -17,22 +17,26 @@ public class AggregatorController {
     private final NewsService newsService;
 
     @GetMapping("/api/v1/news")
-    public String[] getAllNews() {
+    public List<NewsDto> getAllNews() {
+
         return newsService.getNews();
     }
 
     @GetMapping("/api/vi/news/{id}")
     public ResponseEntity<NewsDto> getNewsById(@PathVariable Long id) {
+
         return newsService.findById(id);
     }
 
     @GetMapping("api/v1/categories")
     public List<String> getCategories() {
+
         return List.of("category1");
     }
 
     @GetMapping("api/v1/sourses")
     public List<String> getSourses() {
+
         return List.of("url");
     }
 }

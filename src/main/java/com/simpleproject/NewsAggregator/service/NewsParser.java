@@ -5,15 +5,11 @@ import org.w3c.dom.Document;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -90,32 +86,55 @@ public class NewsParser {
         for (int i = 0; i < items.getLength(); i++) {
             Element item = (Element) items.item(i);
 
-            String title = getElementText(item, "title");
+            String title = truncateText(getElementText(item, "title"));
             String link = getElementText(item, "link");
-            String description = getElementText(item, "description");
+            String description = truncateText(getElementText(item, "description"));
             String category = getCategory(item);
             String pubDate = getElementText(item, "pubDate");
-            String media = getMediaUrl(item);
+            String media = truncateText(getMediaUrl(item));
 
             NewsDto newsDto = new NewsDto(
-                    random.nextLong(), title, link, description, category, pubDate, media
+                    Math.abs(random.nextLong()), title, link, description, category, pubDate, media
             );
             newsList.add(newsDto);
         }
         return newsList;
     }
 
+    private String truncateText(String text) {
+        int MAX_LENGTH = 500;
+        if (text == null || text.length() <= MAX_LENGTH) {
+            return text;
+        }
+        return text.substring(0, MAX_LENGTH - 3) + "...";
+    }
+
     private String getElementText(Element element, String tagName) {
         NodeList nodes = element.getElementsByTagName(tagName);
         if (nodes.getLength() > 0) {
             String text = nodes.item(0).getTextContent();
+            if ("description".equals(tagName)) {
+                text = cleanDescription(text);
+            }
             return cleanText(text);
         }
         return "";
     }
 
+    private String cleanDescription(String description) {
+        // Удаляем все HTML теги
+        String cleaned = description.replaceAll("<[^>]*>", "");
+        // Удаляем ссылки (http, https, www)
+        cleaned = cleaned.replaceAll("https?://\\S+\\s?", "");
+        cleaned = cleaned.replaceAll("www\\.\\S+\\s?", "");
+        // Удаляем лишние пробелы
+        cleaned = cleaned.replaceAll("\\s+", " ").trim();
+        return cleaned;
+    }
+
     private String cleanText(String text) {
         return text.replace("â\u0080\u0099", "'")
+                .replace("â\u0080\u0098", "'")
                 .replace("â€™", "'")
                 .replace("â€“", "-")
                 .replace("â€”", "—")

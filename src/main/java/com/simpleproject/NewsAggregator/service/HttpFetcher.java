@@ -18,7 +18,7 @@ public class HttpFetcher {
     private NewsParser parser;
 
     public List<NewsDto> getNewsFromSource(SourceDto source){
-        System.out.println("вызван HttpFetcherService");
+
         List<NewsDto> newsList = List.of();
         String responce = null;
         try {

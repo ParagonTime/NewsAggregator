@@ -13,15 +13,14 @@ public record NewsDto(
 ) {
 
     public static NewsEntity toEntity(NewsDto newsDto) {
-        return new NewsEntity(
-                newsDto.id,
-                newsDto.title,
-                newsDto.link,
-                newsDto.description,
-                newsDto.category,
-                newsDto.pubDate,
-                newsDto.media
-        );
+        NewsEntity entity = new NewsEntity();
+        entity.setTitle(newsDto.title);
+        entity.setLink(newsDto.link);
+        entity.setDescription(newsDto.description);
+        entity.setCategory(newsDto.category);
+        entity.setPubDate(newsDto.pubDate);
+        entity.setMedia(newsDto.media);
+        return entity;
     }
 
     @Override
@@ -30,7 +29,7 @@ public record NewsDto(
                 "id=" + id +
                 ", title=" + title + '\n' +
                 ", link=" + link + '\n' +
-                //", description=" + description + '\n' +
+                ", description=" + description + '\n' +
                 ", category=" + category + '\n' +
                 ", pubDate=" + pubDate + '\n' +
                 ", media=" + media + '\n' +

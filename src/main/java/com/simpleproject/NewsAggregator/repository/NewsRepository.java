@@ -12,4 +12,7 @@ public interface NewsRepository extends JpaRepository<NewsEntity, Long> {
 
     @Query(value = "select * from news where link = :link", nativeQuery = true)
     NewsEntity findByLink(String link);
+
+    @Query(value = "select * from news order by id desc limit 25", nativeQuery = true)
+    List<NewsEntity> getNewsLimit25();
 }

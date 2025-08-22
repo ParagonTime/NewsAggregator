@@ -1,5 +1,6 @@
 package com.simpleproject.NewsAggregator.entity;
 
+import com.simpleproject.NewsAggregator.dto.NewsDto;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -30,4 +31,16 @@ public class NewsEntity {
     
     @Column(length = 500)
     private String media;
+
+    public NewsDto toDto() {
+        return new NewsDto(
+                this.id,
+                this.title,
+                this.link,
+                this.description,
+                this.category,
+                this.pubDate,
+                this.media
+        );
+    }
 }

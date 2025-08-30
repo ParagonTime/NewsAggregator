@@ -1,6 +1,7 @@
 package com.simpleproject.NewsAggregator.service;
 
 import com.simpleproject.NewsAggregator.dto.NewsDto;
+import lombok.extern.slf4j.Slf4j;
 import org.w3c.dom.Document;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Element;
@@ -16,6 +17,7 @@ import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Slf4j
 @Service
 public class NewsParser {
 
@@ -27,7 +29,7 @@ public class NewsParser {
             // Пытаемся распарсить с автоматическим определением кодировки
             return parseWithEncodingDetection(xmlContent, random);
         } catch (Exception e) {
-            System.out.println("Основной парсинг не удался, пробуем fallback: " + e.getMessage());
+            log.error("Основной парсинг не удался, пробуем fallback: {}", e.getMessage());
             // Если не получилось, пробуем альтернативные кодировки
             return parseWithFallbackEncodings(xmlContent, random);
         }
@@ -62,8 +64,7 @@ public class NewsParser {
 
                 return parseDocument(document, random);
             } catch (Exception e) {
-                System.out.println("Не удалось с кодировкой " + encoding + ": " + e.getMessage());
-                continue;
+                log.error("Не удалось с кодировкой {}", (encoding + ": " + e.getMessage()));
             }
         }
         throw new RuntimeException("Не удалось распарсить XML ни с одной кодировкой");

@@ -6,11 +6,13 @@ import com.simpleproject.NewsAggregator.entity.NewsEntity;
 import com.simpleproject.NewsAggregator.repository.NewsRepository;
 import com.simpleproject.NewsAggregator.repository.SourceRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class NewsParsingOrchestrator {
@@ -19,53 +21,40 @@ public class NewsParsingOrchestrator {
     private final SourceRepository sourceRepository;
     private final NewsRepository newsRepository;
 
-
-
     public void parseAllActiveSources() {
-        System.out.println("вызван оркестратор");
+        log.info("Вызван оркестратор");
 
         List<NewsDto> resultNewsList =  new ArrayList<>();
 
         List<SourceDto> sources = sourceRepository.findAllActiveSources().stream()
                 .map(SourceDto::toDto)
                 .toList();
-        // System.out.println(sources.stream().toList());
-
         try {
-//            for (SourceDto source : sources) {
-//                List<NewsDto> listNews = fetcherService.getNewsFromSource(source);
-//                System.out.println(source.name() + " " + listNews.size() + " новостей");
-//                resultNewsList.addAll(listNews);
-//            }
             List<NewsDto> listNews = fetcherService.getNewsFromSources(sources);
-            System.out.println("Найдено " + listNews.size() + " новостей");
+            log.info("Найдено {} новостей", listNews.size());
             resultNewsList.addAll(listNews);
 
         } catch (Exception e) {
-            System.out.println("ошибка в NewsParsingOrchestrator");
+            log.error("ошибка в NewsParsingOrchestrator");
             e.getStackTrace();
         }
-
-        //System.out.println(resultNewsList.stream().toList());
-        // преобразовываем dto в entity
-        // здесь нужно отправлять эти новости в базу данных таблицы news
         List<NewsEntity> newsEntityList = resultNewsList.stream()
                 .map(NewsDto::toEntity)
                 .toList();
-
         saveFromList(newsEntityList);
-
     }
 
     private void saveFromList(List<NewsEntity> newsList) {
+        int newNewsCount = 0;
         for (NewsEntity news : newsList) {
             if (newsRepository.findByLink(news.getLink()) == null) {
                 newsRepository.save(news);
-                System.out.println("Новость: " + news.getTitle() + " внесена в базу");
+                newNewsCount++;
+                log.info("Новость внесена в базу: {}", news.getTitle());
             }
         }
+        log.info("{} новых новостей добавлено в базу", newNewsCount);
     }
-
 }
 
 

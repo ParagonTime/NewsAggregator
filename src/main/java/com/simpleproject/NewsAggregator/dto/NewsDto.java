@@ -1,13 +1,18 @@
 package com.simpleproject.NewsAggregator.dto;
 
 import com.simpleproject.NewsAggregator.entity.NewsEntity;
+import jakarta.validation.constraints.NotNull;
 
 public record NewsDto(
+        @NotNull
         Long id,
+        @NotNull
         String title,
+        @NotNull
         String link,
         String description,
         String category,
+        @NotNull(message = "отсутствует дата публикации")
         String pubDate,
         String media
 ) {

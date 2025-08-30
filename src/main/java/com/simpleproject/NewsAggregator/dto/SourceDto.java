@@ -1,11 +1,16 @@
 package com.simpleproject.NewsAggregator.dto;
 
 import com.simpleproject.NewsAggregator.entity.SourceEntity;
+import jakarta.validation.constraints.NotNull;
+
 
 public record SourceDto(
+        @NotNull
         Long id,
+        @NotNull
         String name,
         String urlMain,
+        @NotNull
         String urlToFetch,
         boolean isActive
 ) {

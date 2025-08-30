@@ -14,6 +14,10 @@
             <maxFileSize>10MB</maxFileSize>
             <maxHistory>30</maxHistory>
         </rollingPolicy>
+        <!-- Отключаем буферизацию для немедленной записи -->
+        <immediateFlush>true</immediateFlush>
+        <!-- Принудительная запись при каждом событии -->
+        <prudent>false</prudent>
     </appender>
 
     <!-- Корневой логгер - только в файл -->

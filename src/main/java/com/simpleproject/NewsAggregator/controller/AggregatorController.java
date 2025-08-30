@@ -3,6 +3,7 @@ package com.simpleproject.NewsAggregator.controller;
 import com.simpleproject.NewsAggregator.dto.NewsDto;
 import com.simpleproject.NewsAggregator.service.NewsService;
 import com.simpleproject.NewsAggregator.service.SourcesService;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,7 +24,10 @@ public class AggregatorController {
     }
 
     @GetMapping("/api/v1/news/{id}")
-    public NewsDto getNewsById(@PathVariable Long id) {
+    public NewsDto getNewsById(
+            @PathVariable
+            @Min(value = 1, message = "Индекс должен быть больше 0")
+            Long id) {
         return newsService.findById(id);
     }
 

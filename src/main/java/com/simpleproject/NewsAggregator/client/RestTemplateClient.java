@@ -32,7 +32,6 @@ public class RestTemplateClient {
         );
 
         log.info("Status code: {}", response.getStatusCode());
-//        System.out.println("body: " + response.getBody());
 
         return response.getBody().toString();
     }

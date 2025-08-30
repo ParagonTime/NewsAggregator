@@ -1,20 +1,23 @@
 package com.simpleproject.NewsAggregator.service;
 
-import com.simpleproject.NewsAggregator.client.WebClient;
+import com.simpleproject.NewsAggregator.client.NewsWebClient;
+import com.simpleproject.NewsAggregator.client.RestTemplateClient;
 import com.simpleproject.NewsAggregator.dto.NewsDto;
 import com.simpleproject.NewsAggregator.dto.SourceDto;
 import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
 @AllArgsConstructor
 public class HttpFetcher {
 
-    private WebClient client;
+//    private RestTemplateClient client;
+//    private NewsWebClient webClient;
+    private NewsWebClient client;
     private NewsParser parser;
 
     public List<NewsDto> getNewsFromSource(SourceDto source){
@@ -32,6 +35,10 @@ public class HttpFetcher {
         } catch (Exception e) {
             System.out.println("ошибка при вызове parser.parseXML(responce.toString())");
         }
+
+        
+//        String responceWeb = webClient.fetchSource(source);
+//        System.out.println(responceWeb.equals(responce));
 
         return newsList;
     }

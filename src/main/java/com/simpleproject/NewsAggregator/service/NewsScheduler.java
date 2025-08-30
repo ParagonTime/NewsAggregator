@@ -10,7 +10,7 @@ public class NewsScheduler {
 
     private final NewsParsingOrchestrator orchestrator;
 
-    @Scheduled(fixedRate = 5 * 60 * 1000)
+    @Scheduled(fixedRate = 15 * 60 * 1000)
     public void scheduledParsing() { // spring call this fu
         orchestrator.parseAllActiveSources();
     }

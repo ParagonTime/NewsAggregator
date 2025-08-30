@@ -2,6 +2,7 @@ package com.simpleproject.NewsAggregator.client;
 
 import com.simpleproject.NewsAggregator.dto.SourceDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -9,15 +10,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
-public class WebClient {
-
-
+public class RestTemplateClient {
 
     public String fetchSource(SourceDto source) {
 
-        System.out.println("Запрос к: " + source.urlToFetch());
+        log.info("Запрос к: {}", source.urlToFetch());
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("User-Agent", "NewsSercher00/1.0");
@@ -31,9 +31,8 @@ public class WebClient {
                 String.class
         );
 
-
-        System.out.println("Status code: " + response.getStatusCode());
-        //System.out.println("body: " + response.getBody());
+        log.info("Status code: {}", response.getStatusCode());
+//        System.out.println("body: " + response.getBody());
 
         return response.getBody().toString();
     }

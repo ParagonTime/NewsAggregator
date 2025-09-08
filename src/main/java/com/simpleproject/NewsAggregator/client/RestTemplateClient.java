@@ -19,11 +19,11 @@ public class RestTemplateClient {
 
         log.info("Запрос к: {}", source.urlToFetch());
 
-        HttpHeaders headers = new HttpHeaders();
+        HttpHeaders headers = new HttpHeaders(); // не лучше ли вынести в конструктор?
         headers.set("User-Agent", "NewsSercher00/1.0");
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
-        RestTemplate restTemplate = new RestTemplate();
+        RestTemplate restTemplate = new RestTemplate(); // не лучше ли вынести в конструктор?
         ResponseEntity<String> response = restTemplate.exchange(
                 source.urlToFetch(),
                 HttpMethod.GET,

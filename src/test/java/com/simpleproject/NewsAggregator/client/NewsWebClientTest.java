@@ -80,7 +80,7 @@ class NewsWebClientTest {
      * Проверяем: метод возвращает ожидаемые данные
      */
     @Test
-    void should_ReturnContent_when_ServerRespondsWithSuccess() {
+    void fetchSource_shouldReturnContent_whenServerRespondsWithSuccess() {
         // Arrange: настройка мока для успешного ответа
         String expectedContent = "<rss><channel><title>Test News</title></channel></rss>";
         mockWebServer.enqueue(new MockResponse()
@@ -105,7 +105,7 @@ class NewsWebClientTest {
      * Проверяем: метод выбрасывает исключение при ошибке сервера
      */
     @Test
-    void should_ThrowException_when_ServerRespondsWithError() {
+    void fetchSource_shouldThrowException_whenServerRespondsWithError() {
         // Arrange: настройка мока для ошибки сервера
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(500)
@@ -127,7 +127,7 @@ class NewsWebClientTest {
      * Проверяем: метод корректно обрабатывает пустые ответы
      */
     @Test
-    void should_ReturnEmptyString_when_ServerRespondsWithEmptyBody() {
+    void fetchSource_shouldReturnEmptyString_whenServerRespondsWithEmptyBody() {
         // Arrange: настройка мока для пустого ответа
         mockWebServer.enqueue(new MockResponse()
                 .setBody("")
@@ -151,7 +151,7 @@ class NewsWebClientTest {
      * Проверяем: метод корректно обрабатывает таймауты
      */
     @Test
-    void should_ThrowException_when_ServerTimeout() {
+    void fetchSource_shouldThrowException_whenServerTimeout() {
         // Arrange: настройка мока с задержкой (имитация таймаута)
         mockWebServer.enqueue(new MockResponse()
                 .setBody("Delayed response")

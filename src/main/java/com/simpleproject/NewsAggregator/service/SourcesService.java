@@ -12,17 +12,17 @@ public class SourcesService {
 
     private final SourceRepository sourceRepository;
 
-    public List<String> getAllResources() {
+    public List<String> getResources() {
         List<String> sourcesList = sourceRepository.getAllSources();
-        if (!sourcesList.isEmpty()) {
+        if (sourcesList != null && !sourcesList.isEmpty()) {
             return sourcesList;
         }
         return null;
     }
 
-    public List<String> getAllCategories() {
+    public List<String> getCategories() {
         List<String> categoriesList = sourceRepository.getCategories();
-        if (!categoriesList.isEmpty()) {
+        if (categoriesList != null && !categoriesList.isEmpty()) {
             return categoriesList;
         }
         return null;

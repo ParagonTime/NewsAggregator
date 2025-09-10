@@ -19,7 +19,7 @@ public class AggregatorController {
     private final SourcesService sourcesService;
 
     @GetMapping("/api/v1/news")
-    public List<NewsDto> getAllNews() {
+    public List<NewsDto> getNews() {
         return newsService.getNews();
     }
 
@@ -28,16 +28,17 @@ public class AggregatorController {
             @PathVariable
             @Min(value = 1, message = "Индекс должен быть больше 0")
             Long id) {
-        return newsService.findById(id);
+        return newsService.findNewsById(id);
     }
 
     @GetMapping("api/v1/categories")
     public List<String> getCategories() {
-        return sourcesService.getAllCategories();
+        return sourcesService.getCategories();
     }
 
     @GetMapping("api/v1/sources")
     public List<String> getSources() {
-        return sourcesService.getAllResources();
+
+        return sourcesService.getResources();
     }
 }

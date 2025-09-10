@@ -17,15 +17,15 @@ public class NewsService {
 
     public List<NewsDto> getNews() {
         List<NewsEntity> requestNews = newsRepository.getNewsLimit25();
-        if (!requestNews.isEmpty()) {
+        if (requestNews != null && !requestNews.isEmpty()) {
             return requestNews.stream().map(NewsEntity::toDto).toList();
         }
         return null;
     }
 
-    public NewsDto findById(Long id) {
+    public NewsDto findNewsById(Long id) {
         Optional<NewsEntity> transfer = newsRepository.findById(id);
-        if (transfer.isPresent()) {
+        if (transfer != null && transfer.isPresent()) {
             return transfer.get().toDto();
         }
         return null;

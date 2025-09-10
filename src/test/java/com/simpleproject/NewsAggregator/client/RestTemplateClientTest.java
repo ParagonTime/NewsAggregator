@@ -34,7 +34,7 @@ class RestTemplateClientTest {
     }
 
     @Test
-    void test1() {
+    void fetchSource_shouldReturnContent_whenServerRespondsWithSuccess() {
         String expectedContent = "<rss><channel><title>Test News</title></channel></rss>";
         mockWebServer.enqueue(new MockResponse()
                 .setBody(expectedContent)
@@ -44,25 +44,21 @@ class RestTemplateClientTest {
 
         assertNotNull(result);
         assertEquals(expectedContent, result);
-
         assertEquals(1, mockWebServer.getRequestCount());
     }
 
     @Test
-    void test2() {
+    void fetchSource_shouldThrowException_thenServerRespondsWithError() {
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(500)
                 .setBody("Internal Server Error"));
 
-        assertThrows(RuntimeException.class, () -> {
-            restTemplateClient.fetchSource(testSource);
-        });
-
+        assertThrows(RuntimeException.class, () -> restTemplateClient.fetchSource(testSource));
         assertEquals(1, mockWebServer.getRequestCount());
     }
 
     @Test
-    void test3() {
+    void fetchSource_shouldReturnEmptyString_whenServerRespondsWithEmptyBody() {
         mockWebServer.enqueue(new MockResponse()
                 .setBody("")
                 .addHeader("Content-Type", "text/plain"));
@@ -71,15 +67,11 @@ class RestTemplateClientTest {
             String result = restTemplateClient.fetchSource(testSource);
             assertTrue(result == null || result.isEmpty());
         });
-
-
-
-
         assertEquals(1, mockWebServer.getRequestCount());
     }
 
     @Test
-    void test4() {
+    void fetchSource_shouldThrowException_thenServerTimeout() {
         mockWebServer.enqueue(new MockResponse()
                 .setBody("Delayed response")
                 .setBodyDelay(2, java.util.concurrent.TimeUnit.SECONDS));
@@ -88,7 +80,6 @@ class RestTemplateClientTest {
             String result = restTemplateClient.fetchSource(testSource);
             assertTrue(result == null || result.contains("Delayed response"));
         });
-
         assertEquals(1, mockWebServer.getRequestCount());
     }
 }

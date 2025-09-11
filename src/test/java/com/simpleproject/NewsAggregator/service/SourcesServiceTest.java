@@ -8,6 +8,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -36,10 +37,9 @@ class SourcesServiceTest {
     @Test
     void getResources_ShouldReturnNull_WhenRepositoryReturnsEmptyList() {
         when(sourceRepository.getAllSources()).thenReturn(List.of());
+        assertThrows(NoSuchElementException.class,
+                () -> sourcesService.getResources());
 
-        List<String> result = sourcesService.getResources();
-
-        assertNull(result);
         verify(sourceRepository, times(1)).getAllSources();
     }
 
@@ -47,9 +47,8 @@ class SourcesServiceTest {
     void getResources_ShouldReturnNull_WhenRepositoryReturnsNull() {
         when(sourceRepository.getAllSources()).thenReturn(null);
 
-        List<String> result = sourcesService.getResources();
+        assertThrows(NoSuchElementException.class, () -> sourcesService.getResources());
 
-        assertNull(result);
         verify(sourceRepository, times(1)).getAllSources();
     }
 
@@ -69,9 +68,8 @@ class SourcesServiceTest {
     void getCategories_ShouldReturnNull_WhenRepositoryReturnsEmptyList() {
         when(sourceRepository.getCategories()).thenReturn(List.of());
 
-        List<String> result = sourcesService.getCategories();
+        assertThrows(NoSuchElementException.class, () -> sourcesService.getCategories());
 
-        assertNull(result);
         verify(sourceRepository, times(1)).getCategories();
     }
 
@@ -79,9 +77,8 @@ class SourcesServiceTest {
     void getCategories_ShouldReturnNull_WhenRepositoryReturnsNull() {
         when(sourceRepository.getCategories()).thenReturn(null);
 
-        List<String> result = sourcesService.getCategories();
+        assertThrows(NoSuchElementException.class, () -> sourcesService.getCategories());
 
-        assertNull(result);
         verify(sourceRepository, times(1)).getCategories();
     }
 }

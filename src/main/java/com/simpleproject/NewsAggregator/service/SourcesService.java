@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -14,17 +15,17 @@ public class SourcesService {
 
     public List<String> getResources() {
         List<String> sourcesList = sourceRepository.getAllSources();
-        if (sourcesList != null && !sourcesList.isEmpty()) {
-            return sourcesList;
+        if (sourcesList == null || sourcesList.isEmpty()) {
+            throw new NoSuchElementException("No sources available");
         }
-        return null;
+        return sourcesList;
     }
 
     public List<String> getCategories() {
         List<String> categoriesList = sourceRepository.getCategories();
-        if (categoriesList != null && !categoriesList.isEmpty()) {
-            return categoriesList;
+        if (categoriesList == null || categoriesList.isEmpty()) {
+            throw new NoSuchElementException("No categories available");
         }
-        return null;
+        return categoriesList;
     }
 }

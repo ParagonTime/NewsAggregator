@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -17,10 +18,10 @@ public class NewsService {
 
     public List<NewsDto> getNews() {
         List<NewsEntity> requestNews = newsRepository.getNewsLimit25();
-        if (requestNews != null && !requestNews.isEmpty()) {
-            return requestNews.stream().map(NewsEntity::toDto).toList();
+        if (requestNews == null || requestNews.isEmpty()) {
+            throw new NoSuchElementException("No news avaliable");
         }
-        return null;
+        return requestNews.stream().map(NewsEntity::toDto).toList();
     }
 
     public NewsDto findNewsById(Long id) {
@@ -28,6 +29,6 @@ public class NewsService {
         if (transfer != null && transfer.isPresent()) {
             return transfer.get().toDto();
         }
-        return null;
+        throw new NoSuchElementException("News with id:" + id + " not found");
     }
 }

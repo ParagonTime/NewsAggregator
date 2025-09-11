@@ -10,11 +10,13 @@ import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/api/v1")
 @RequiredArgsConstructor
 @Tag(name = "News Aggregator", description = "API для получения новостей")
 public class AggregatorController {
@@ -24,7 +26,7 @@ public class AggregatorController {
 
     @Operation(summary = "Получить новости", description = "Возвращает список из 25 последний новостей")
     @ApiResponse(responseCode = "200", description = "Новости получены")
-    @GetMapping("/api/v1/news")
+    @GetMapping("/news")
     public List<NewsDto> getNews() {
         return newsService.getNews();
     }
@@ -32,7 +34,7 @@ public class AggregatorController {
     @Operation(summary = "Получить новость по ID", description = "Возвращает новость по указанному ID")
     @ApiResponse(responseCode = "200", description = "Новость найдена")
     @ApiResponse(responseCode = "404", description = "Новость не найдена")
-    @GetMapping("/api/v1/news/{id}")
+    @GetMapping("/news/{id}")
     public NewsDto getNewsById(
             @PathVariable
             @Min(value = 1, message = "Индекс должен быть больше 0")
@@ -42,14 +44,14 @@ public class AggregatorController {
 
     @Operation(summary = "Получить категории новостей", description = "Возвращает список категорий новостей")
     @ApiResponse(responseCode = "200", description = "Категории получены")
-    @GetMapping("api/v1/categories")
+    @GetMapping("/categories")
     public List<String> getCategories() {
         return sourcesService.getCategories();
     }
 
     @Operation(summary = "Получить источники новостей", description = "Возвращает список источников новостей")
     @ApiResponse(responseCode = "200", description = "Источники получены")
-    @GetMapping("api/v1/sources")
+    @GetMapping("/sources")
     public List<String> getSources() {
 
         return sourcesService.getResources();

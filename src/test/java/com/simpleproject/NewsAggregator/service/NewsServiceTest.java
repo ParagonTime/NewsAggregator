@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -41,9 +42,8 @@ class NewsServiceTest {
     void getNews_ShouldReturnNull_WhenRepositoryReturnsEmptyList() {
         when(newsRepository.getNewsLimit25()).thenReturn(List.of());
 
-        List<NewsDto> result = newsService.getNews();
-
-        assertNull(result);
+        assertThrows(NoSuchElementException.class,
+                () -> newsService.getNews());
         verify(newsRepository).getNewsLimit25();
     }
 
@@ -51,9 +51,8 @@ class NewsServiceTest {
     void getNews_ShouldReturnNull_WhenRepositoryReturnsNull() {
         when(newsRepository.getNewsLimit25()).thenReturn(null);
 
-        List<NewsDto> result = newsService.getNews();
-
-        assertNull(result);
+        assertThrows(NoSuchElementException.class,
+                () -> newsService.getNews());
         verify(newsRepository).getNewsLimit25();
     }
 
@@ -72,9 +71,8 @@ class NewsServiceTest {
     void findNewsById_ShouldReturnNull_WhenNewsNotFound() {
         when(newsRepository.findById(1L)).thenReturn(Optional.empty());
 
-        NewsDto result = newsService.findNewsById(1L);
-
-        assertNull(result);
+        assertThrows(NoSuchElementException.class,
+                () -> newsService.findNewsById(1L));
         verify(newsRepository).findById(1L);
     }
 
@@ -82,9 +80,8 @@ class NewsServiceTest {
     void findNewsById_ShouldReturnNull_WhenRepositoryReturnsNull() {
         when(newsRepository.findById(1L)).thenReturn(null);
 
-        NewsDto result = newsService.findNewsById(1L);
-
-        assertNull(result);
+        assertThrows(NoSuchElementException.class,
+                () -> newsService.findNewsById(1L));
         verify(newsRepository).findById(1L);
     }
 }

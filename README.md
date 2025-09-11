@@ -1,79 +1,40 @@
 ## NewsAggregator
 
-Небольшой агрегатор новостей на Spring Boot: периодически опрашивает источники, парсит ленты и сохраняет новости в PostgreSQL. Предоставляет REST API для получения списка новостей, категорий и источников.
+Агрегатор новостей на Spring Boot
+с автоматическим парсингом RSS-лент,
+кэшированием и REST API.
 
-### Стек
-- Java 24, Spring Boot 3
-- Spring Web, Spring Data JPA, Scheduling
-- PostgreSQL
-- Lombok
+### Технологический стек
 
-### Возможности
-- Планировщик парсинга новостей каждые 15 минут
-- Хранение новостей в БД с защитой от дублей по `link`
-- REST API для получения новостей (последние 25), новости по `id`, категорий и источников
+**Backend:** Java 24+, Spring Boot 3.x, Spring Web MVC, Data JPA, Scheduling, PostgreSQL, Hibernate, EhCache, Lombok  
+**Инфраструктура:** Docker, Maven, JUnit 5, Mockito  
+**Документация:** Swagger/OpenAPI 3.0
 
-### Требования
-- JDK 24 (или совместимый)
-- Maven (или `mvnw` из проекта)
-- PostgreSQL 14+
+### Основные возможности и особенности
 
-### Установка и запуск
-1) Настроить БД PostgreSQL:
-- создать БД `newsaggregator`
-- задать доступы пользователя
+- **Автопарсинг новостей** по расписанию из multiple RSS-источников с интервалом 15 минут
+- **Многоуровневое кэширование** данных (EhCache) для высокопроизводительного API
+- **Полноценное REST API** с получением новостей, категорий и источников
+- **Глобальная обработка ошибок** через `@ControllerAdvice` с единым форматом ответов
+- **Валидация входных данных** через Bean Validation с кастомными сообщениями
+- **CORS конфигурация** для кросс-доменных запросов с фронтенда
+- **Swagger документация** с автоматической генерацией для всех эндпоинтов
+- **Защита от дубликатов** по URL новостей при сохранении в БД
+- **Rate limiting** для защиты API от злоупотреблений
+- **Логирование ключевых операций** и мониторинг здоровья приложения
 
-2) Заполнить `src/main/resources/application.properties`:
-```
-spring.datasource.url=jdbc:postgresql://localhost:5432/newsaggregator
-spring.datasource.username=postgres
-spring.datasource.password=admin
-spring.jpa.hibernate.ddl-auto=update
-spring.jpa.show-sql=true
-```
+### REST API эндпоинты
 
-3) Сборка и запуск:
-```
-./mvnw clean package
-./mvnw spring-boot:run
-```
-Windows PowerShell:
-```
-mvnw.cmd clean package
-mvnw.cmd spring-boot:run
-```
+- `GET /api/v1/news` - Последние новости 
+- `GET /api/v1/news/{id}` - Конкретная новость по ID с валидацией
+- `GET /api/v1/categories` - Список всех категорий новостей
+- `GET /api/v1/sources` - Список активных источников новостей
 
-### REST API
-- GET `/api/v1/news` — последние 25 новостей
-- GET `/api/v1/news/{id}` — новость по идентификатору
-- GET `/api/v1/categories` — список категорий
-- GET `/api/v1/sources` — список источников
 
-Примеры:
-```
-curl http://localhost:8080/api/v1/news
-curl http://localhost:8080/api/v1/news/1
-curl http://localhost:8080/api/v1/categories
-curl http://localhost:8080/api/v1/sources
-```
 
-### Планировщик
-- Включён аннотацией `@EnableScheduling`
-- Задача `@Scheduled(fixedRate = 15 * 60 * 1000)` запускает парсинг раз в 15 минут
+### Документация API: 
+http://localhost:8080/swagger-ui.html
 
-### Структура проекта
-- `controller/AggregatorController` — REST эндпоинты
-- `service/` — бизнес-логика: парсинг, загрузка, оркестратор, планировщик
-- `repository/` — доступ к БД (JPA)
-- `entity/`, `dto/` — сущности и DTO
-- `resources/application.properties` — конфигурация
 
-### Тесты
-Запуск:
-```
-./mvnw test
-```
-
-### Примечания
-- Миграции схемы управляются Hibernate (`ddl-auto=update`). Для продакшн рекомендуется Flyway/Liquibase.
-- Логирование сейчас базовое; для продакшн рекомендуются SLF4J + Logback.
+**Лицензия:** MIT  
+**Версия:** 1.0.0

@@ -6,6 +6,7 @@ import com.simpleproject.NewsAggregator.service.SourcesService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,6 +39,7 @@ public class AggregatorController {
     public NewsDto getNewsById(
             @PathVariable
             @Min(value = 1, message = "Индекс должен быть больше 0")
+            @Max(value = 1_000_000)
             Long id) {
         return newsService.findNewsById(id);
     }

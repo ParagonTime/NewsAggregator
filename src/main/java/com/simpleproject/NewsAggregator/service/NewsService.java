@@ -25,6 +25,10 @@ public class NewsService {
     }
 
     public NewsDto findNewsById(Long id) {
+        // проверка для throw new IllegalArgumentException();
+        if (id > 1_000_000) {
+            throw new IllegalArgumentException("News with id:" + id + " not found");
+        }
         Optional<NewsEntity> transfer = newsRepository.findById(id);
         if (transfer != null && transfer.isPresent()) {
             return transfer.get().toDto();
